@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container{
+            margin: auto;
+            width: 70%;
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 25px;
+        }
+        #container>div>img{
+            width: 80%;
+            height: 200px;
+        }
+    
+        @media all and (max-width:900px) and (min-width:200px){
+            #container{
+                grid-template-columns: repeat(2,1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <select>
+        <option>categories</option>
+        <option value="electronics">electronics</option>
+        <option value="jewelery">jewelery</option>
+        <option value="men's clothing">men's clothing</option>
+        <option value="women's clothing">women's clothing</option>
+    </select>
+
+    <div id="container"></div>
+
+</body>
+<script>
+  
+    let container=document.querySelector("#container")
+    let categorySelect=document.querySelector("select")
+
+   function getData(URL){
+    fetch(URL)
+   .then(function (res){
+    //res.json()
+    return res.json()
+   })
+   .then(function (res){
+     console.log(res)
+    showData(res)
+   })
+   .catch(function (err){
+    console.log("err")
+   })
+   }
+   //getData('https://fakestoreapi.com/products')
+  // getData("https://fakestoreapi.com/products/categories")
+
+
+function showData(arr){
+    //console.log(arr)
+    container.innerHTML=null
+    arr.forEach(function (ele,i){
+        let box=document.createElement("div")
+
+        let h3=document.createElement("h3")
+        h3.innerHTML=ele.title
+
+        let img=document.createElement("img")
+        img.src=ele.image
+  
+    box.append(img,h3)
+    container.append(box)
+    })
+} 
+
+function handlecategoryChange(){
+    let value=categorySelect.value
+    let URL=`https://fakestoreapi.com/products/category/${value}`
+    getData(URL)
+}
+
+categorySelect.addEventListener("change", handlecategoryChange)
+
+getData('https://fakestoreapi.com/products')
+
+categorySelect.addEventListener("change", handlecategoryChange)
+getData("https://fakestoreapi.com/products")
+
+</script>
+</html>
